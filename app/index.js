@@ -32,13 +32,14 @@ app.use(KoaCors({
   origin: '*',
 }))
 
-// X-Response-Time
 app.use(async (ctx, next) => {
   const start = Date.now()
 
   await next()
 
   const ms = Date.now() - start
+
+  ctx.set('X-Powered-By', 'koa')
 
   ctx.set('X-Response-Time', `${ms}ms`)
 })
