@@ -1,0 +1,30 @@
+{
+  "scripts": {
+    "start": "nodemon index.js",
+    "dev": "npm start"
+  },
+  "dependencies": {
+    "@koa/cors": "^2.2.3",
+    "art-template": "^4.13.2",
+    "isomorphic-fetch": "^2.2.1",
+    "koa": "^2.6.2",
+    "koa-art-template": "^1.1.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-favicon": "^2.0.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.0",
+    "koa-onerror": "^4.1.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "query-string": "^6.2.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chalk": "^2.4.1",
+    "nodemon": "^1.18.9",
+    "ora": "^3.0.0"
+  }
+}

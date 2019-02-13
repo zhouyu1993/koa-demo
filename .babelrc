@@ -1,0 +1,25 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": "commonjs",
+        "targets": {
+          "browsers": [
+            "> 1%",
+            "last 3 versions",
+            "ie >= 9",
+            "ios >= 8",
+            "android >= 4.4"
+          ],
+          "node": "8.14.0"
+        },
+        "useBuiltIns": "usage"
+      }
+    ],
+    "stage-0"
+  ],
+  "plugins": [
+    "transform-runtime"
+  ]
+}
