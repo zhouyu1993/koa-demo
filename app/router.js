@@ -60,6 +60,7 @@ router
   .get('/api/music/gethotkey', async (ctx, next) => {
     const res = await fetch(`${api.music}/splcloud/fcgi-bin/gethotkey.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&_=${+new Date()}`, {
       headers: {
+        origin: 'https://y.qq.com',
         referer: 'https://y.qq.com/m/index.html',
       },
     })
@@ -80,6 +81,7 @@ router
 
     const res = await fetch(`${api.music}/soso/fcgi-bin/search_for_qq_cp?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&catZhida=1&_=${+new Date()}&${queryString.stringify(option)}`, {
       headers: {
+        origin: 'https://y.qq.com',
         referer: 'https://y.qq.com/m/index.html',
       },
     })
@@ -99,6 +101,7 @@ router
 
     const res = await fetch(`${api.music}/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&order=listen&from=h5&_=${+new Date()}&${queryString.stringify(option)}`, {
       headers: {
+        origin: 'https://y.qq.com',
         referer: 'https://y.qq.com/m/index.html',
       },
     })
@@ -117,6 +120,7 @@ router
 
     const res = await fetch(`${api.music}/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&cid=205361747&guid=123456789&_=${+new Date()}&${queryString.stringify(option)}`, {
       headers: {
+        origin: 'https://y.qq.com',
         referer: 'https://y.qq.com/m/index.html',
       },
     })
@@ -134,6 +138,7 @@ router
 
     const res = await fetch(`${api.music}/lyric/fcgi-bin/fcg_query_lyric.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&nobase64=1&musicid=5536869&_=${+new Date()}&${queryString.stringify(option)}`, {
       headers: {
+        origin: 'https://y.qq.com',
         referer: 'https://y.qq.com/m/index.html',
       },
     })
