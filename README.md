@@ -28,6 +28,9 @@ Terminal string styling done right
 
 * koa
 
+* @koa/cors
+  - 跨越
+
 * koa-logger
   - 日志
 

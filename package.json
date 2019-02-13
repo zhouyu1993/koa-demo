@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon index.js",
-    "dev": "npm start"
+    "start": "npm run dev",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "@koa/cors": "^2.2.3",

@@ -109,7 +109,7 @@ router
   })
   .get('/api/music/vkey', async (ctx, next) => {
     const query = ctx.request.query || {}
-    const songmid = query.songmid || '004ec8yZ02bRYx'
+    const songmid = query.songmid || ''
     const option = {
       songmid,
       filename: `C400${songmid}.m4a`,
@@ -127,7 +127,7 @@ router
   })
   .get('/api/music/lyric', async (ctx, next) => {
     const query = ctx.request.query || {}
-    const songid = query.songid || '5536869'
+    const songid = query.songid || ''
     const option = {
       musicid: songid,
     }
