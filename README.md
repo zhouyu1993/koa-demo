@@ -67,4 +67,4 @@ Terminal string styling done right
 
 # 本地模拟 post 请求
 
-`curl -i -X POST -H "'Content-type':'application/json'" -d '{"p1":"1","p2":"2"}' http://localhost:9876/api/items/1/modify?time=20180101`
+`curl -i -X POST -H "'Content-type':'application/json'" -d "p1=1&p2=2" http://localhost:6789/api/items/1/modify?time=20180101`
