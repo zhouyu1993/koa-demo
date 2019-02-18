@@ -1,0 +1,14 @@
+<div>
+  <h1><%= data.data.name %></h1>
+  <table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <% data.data.data.forEach(function (tr) {%>
+      <tr>
+        <% tr.forEach(function (td) {%>
+          <td>
+            <%= td %>
+          </td>
+        <% })%>
+      </tr>
+    <% })%>
+  </table>
+</div>

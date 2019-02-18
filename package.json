@@ -1,4 +1,22 @@
 {
+  "name": "koa-demo",
+  "version": "1.0.0",
+  "description": "koa-demo",
+  "keywords": [
+    "koa"
+  ],
+  "author": "RainJoy <1490079545@qq.com>",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://"
+  },
+  "bugs": {
+    "url": "",
+    "email": ""
+  },
+  "homepage": "",
+  "license": "MIT",
   "scripts": {
     "start": "npm run dev",
     "dev": "nodemon index.js"
@@ -26,5 +44,9 @@
     "chalk": "^2.4.1",
     "nodemon": "^1.18.9",
     "ora": "^3.0.0"
+  },
+  "engines": {
+    "node": "8.14.0",
+    "npm": "^6.4.1"
   }
 }
