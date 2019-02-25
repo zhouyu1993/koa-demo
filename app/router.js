@@ -1,7 +1,11 @@
+import fs from 'fs'
+import stream from 'stream'
+
 import Router from 'koa-router'
 
 import fetch from 'isomorphic-fetch'
 import queryString from 'query-string'
+import nodeXlsx from 'node-xlsx'
 
 const api = {
   domain: 'http://dev.zhouyu.com:6789',
@@ -37,6 +41,7 @@ router
       }
     })
   })
+
   .get('/test/json2html', async (ctx, next) => {
     const data = {
       "name": "点名册正面",
@@ -187,6 +192,189 @@ router
         data: data
       }
     })
+  })
+  .get('/test/json2excel', async (ctx, next) => {
+    const json = {
+      "errorCode": 0,
+      "reason": null,
+      "result": {
+        "data": [
+          [
+              "10",
+              [
+                  [
+                      "1550246400000",
+                      5450
+                  ],
+                  [
+                      "1550332800000",
+                      5453
+                  ],
+                  [
+                      "1550419200000",
+                      5543
+                  ],
+                  [
+                      "1550505600000",
+                      5491
+                  ],
+                  [
+                      "1550592000000",
+                      5852
+                  ],
+                  [
+                      "1550678400000",
+                      5670
+                  ],
+                  [
+                      "1550764800000",
+                      0
+                  ]
+              ]
+          ],
+          [
+              "151",
+              [
+                  [
+                      "1550246400000",
+                      5451
+                  ],
+                  [
+                      "1550332800000",
+                      5454
+                  ],
+                  [
+                      "1550419200000",
+                      5543
+                  ],
+                  [
+                      "1550505600000",
+                      5493
+                  ],
+                  [
+                      "1550592000000",
+                      5875
+                  ],
+                  [
+                      "1550678400000",
+                      5675
+                  ],
+                  [
+                      "1550764800000",
+                      0
+                  ]
+              ]
+          ],
+          [
+              "152",
+              [
+                  [
+                      "1550246400000",
+                      1566
+                  ],
+                  [
+                      "1550332800000",
+                      1569
+                  ],
+                  [
+                      "1550419200000",
+                      1609
+                  ],
+                  [
+                      "1550505600000",
+                      1557
+                  ],
+                  [
+                      "1550592000000",
+                      1750
+                  ],
+                  [
+                      "1550678400000",
+                      1628
+                  ],
+                  [
+                      "1550764800000",
+                      0
+                  ]
+              ]
+          ],
+          [
+              "156",
+              [
+                  [
+                      "1550246400000",
+                      7144
+                  ],
+                  [
+                      "1550332800000",
+                      7144
+                  ],
+                  [
+                      "1550419200000",
+                      7249
+                  ],
+                  [
+                      "1550505600000",
+                      7201
+                  ],
+                  [
+                      "1550592000000",
+                      7631
+                  ],
+                  [
+                      "1550678400000",
+                      7381
+                  ],
+                  [
+                      "1550764800000",
+                      0
+                  ]
+              ]
+          ]
+        ]
+      },
+      "status": null
+    }
+
+    const data = json.result.data
+
+    const logType = { '10': '送达呀', '151': '实际下发', '152': '点击', '156': '计划推送' }
+
+    const xlsxData = [
+      {
+        name: 'Sheet1',
+        data: [
+          ['日期'].concat(data[0][1].map(item => {
+            const time = new Date(+item[0])
+
+            return [time.getFullYear(), time.getMonth() + 1, time.getDate()].join('-')
+          })),
+          ...data.map((item, index) => {
+            return [logType[item[0]]].concat(data[index][1].map(item => item[1]))
+          })
+        ]
+      }
+    ]
+
+    const buffer = nodeXlsx.build(xlsxData)
+    console.log('debug', buffer instanceof stream, Buffer.isBuffer(buffer))
+
+    // fs.writeFile('test-json2excel.xlsx', buffer, 'utf-8', function (err) {
+    //   if (err) {
+    //     console.log('debug', err)
+    //   } else {
+    //     console.log('debug', 'The file has been saved!')
+    //   }
+    // })
+
+    // const bufferStream = new stream.PassThrough()
+    // bufferStream.end(buffer)
+    // ctx.type = 'xlsx'
+    // ctx.body = bufferStream
+
+    ctx.status = 200
+    ctx.type = 'xlsx'
+    ctx.body = buffer
   })
 
   .get('/api/items', async (ctx, next) => {
@@ -491,12 +679,12 @@ router
 
         ctx.body = json
       } else if (!access_token) {
-        ctx.body = ctx.body = {
+        ctx.body = {
           errcode: -1,
           errmsg: 'failed to get access_token'
         }
       } else {
-        ctx.body = ctx.body = {
+        ctx.body = {
           errcode: -2,
           errmsg: 'failed to get openid'
         }
@@ -505,8 +693,10 @@ router
   })
 
   .all('*', async (ctx, next) => {
-    ctx.response.status = 404
-    ctx.response.body = '<h1>404 Not Found</h1>'
+    console.log('debug', ctx.status === ctx.response.status, ctx.body === ctx.response.body)
+
+    ctx.status = 404
+    ctx.body = '<h1>404 Not Found</h1>'
   })
 
 export default router
