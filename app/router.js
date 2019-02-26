@@ -193,6 +193,7 @@ router
       }
     })
   })
+
   .get('/test/json2excel', async (ctx, next) => {
     const json = {
       "errorCode": 0,
@@ -357,7 +358,6 @@ router
     ]
 
     const buffer = nodeXlsx.build(xlsxData)
-    console.log('debug', buffer instanceof stream, Buffer.isBuffer(buffer))
 
     // fs.writeFile('test-json2excel.xlsx', buffer, 'utf-8', function (err) {
     //   if (err) {
@@ -372,9 +372,10 @@ router
     // ctx.type = 'xlsx'
     // ctx.body = bufferStream
 
-    ctx.status = 200
     ctx.type = 'xlsx'
     ctx.body = buffer
+
+    console.log('debug', buffer instanceof stream, Buffer.isBuffer(buffer))
   })
 
   .get('/api/items', async (ctx, next) => {
@@ -401,7 +402,6 @@ router
   })
   .post('/api/items/:id/modify', async (ctx, next) => {
     console.log('debug', ctx.params)
-    console.log('debug', ctx.request.query)
     console.log('debug', ctx.request.body)
 
     ctx.body = {
@@ -535,6 +535,24 @@ router
       }
     }
   })
+  /*
+   * /api/xmpush/sendOpenId?open_id=${open_id}
+   */
+  .post('/api/xmpush/sendOpenId', async (ctx, next) => {
+    const body = ctx.request.body
+
+    const app_key = body.app_key || ''
+    const open_id = body.open_id || ''
+    const user_info = body.user_info || {}
+
+    // 写入数据库
+
+    ctx.body = {
+      errcode: 0,
+      errmsg: 'ok',
+      data: null
+    }
+  })
 
   /*
    * /api/wx/getAccessToken?app_key=${app_key}
@@ -624,9 +642,10 @@ router
    * template_id, page, form_id, data, emphasis_keyword
    */
   .post('/api/wx/sendTemplateMessage', async (ctx, next) => {
-    const query = ctx.request.query || {}
-    const app_key = query.app_key || ''
-    const code = query.code
+    const body = ctx.request.body || {}
+
+    const app_key = body.app_key || ''
+    const code = body.code
 
     return Promise.all([
       await fetch(`${api.domain}/api/wx/getAccessToken?app_key=${app_key}`),
@@ -642,8 +661,6 @@ router
       const openid = code2SessionInfoJson.openid
 
       if (access_token && openid) {
-        const body = ctx.request.body
-
         const template_id = body.template_id || '0yvXL0d8HjAUrSuwxORkLErehefyJS0NUyh8S86-FUk'
         const page = body.page || '/pages/index/index'
         const form_id = body.form_id
@@ -693,10 +710,10 @@ router
   })
 
   .all('*', async (ctx, next) => {
-    console.log('debug', ctx.status === ctx.response.status, ctx.body === ctx.response.body)
-
     ctx.status = 404
     ctx.body = '<h1>404 Not Found</h1>'
+
+    console.log('debug', ctx.status === ctx.response.status, ctx.type === ctx.response.type, ctx.body === ctx.response.body)
   })
 
 export default router
