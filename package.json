@@ -19,7 +19,8 @@
   "license": "MIT",
   "scripts": {
     "start": "npm run dev",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "pm2 start index.js"
   },
   "dependencies": {
     "@koa/cors": "^2.2.3",

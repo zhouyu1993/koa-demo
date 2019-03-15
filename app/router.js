@@ -601,42 +601,7 @@ router
       ctx.body = appInfoJson
     }
   })
-  /*
-   * /api/wx/getTemplateList?app_key=${app_key}&page=${page}&number=${number}
-   */
-  .get('/api/wx/getTemplateList', async (ctx, next) => {
-    const query = ctx.request.query || {}
-    const app_key = query.app_key || ''
 
-    const accessTokenInfo = await fetch(`${api.domain}/api/wx/getAccessToken?app_key=${app_key}`)
-
-    const accessTokenInfoJson = await accessTokenInfo.json()
-
-    const access_token = accessTokenInfoJson.access_token
-    // access_token 在7200秒内有效 (expires_in); access_token 的存储与更新
-
-    if (access_token) {
-      const page = +query.page
-      const number = +query.number
-
-      const res = await fetch(`${api.weixin}/cgi-bin/wxopen/template/list?access_token=${access_token}`, {
-        method: 'POST',
-        body: JSON.stringify({
-          offset: page > 0 ? page - 1 : 0,
-          count: (number > 0 && number < 21) ? number : (number < 1 ? 1 : 20)
-        })
-      })
-
-      const json = await res.json()
-
-      ctx.body = json
-    } else {
-      ctx.body = {
-        errcode: -1,
-        errmsg: 'failed to get access_token'
-      }
-    }
-  })
   /*
    * /api/wx/sendTemplateMessage?app_key=${app_key}&code=${code}
    * template_id, page, form_id, data, emphasis_keyword
@@ -680,9 +645,10 @@ router
         }
         const emphasis_keyword = body.emphasis_keyword || 'keyword1.DATA'
 
-        const res = await fetch(`${api.weixin}/cgi-bin/message/wxopen/template/send?access_token=${access_token}`, {
+        const res = await fetch(`${api.weixin}/cgi-bin/message/wxopen/template/send`, {
           method: 'POST',
           body: JSON.stringify({
+            access_token,
             touser: openid,
             template_id,
             page,
@@ -707,6 +673,119 @@ router
         }
       }
     })
+  })
+
+  /*
+   * /api/wx/sendUniformMessage?app_key=${app_key}&code=${code}
+   * mp_template_msg 或 weapp_template_msg
+   */
+  // .post('/api/wx/sendUniformMessage', async (ctx, next) => {
+  //   const body = ctx.request.body || {}
+  //
+  //   const app_key = body.app_key || ''
+  //   const code = body.code
+  //
+  //   return Promise.all([
+  //     await fetch(`${api.domain}/api/wx/getAccessToken?app_key=${app_key}`),
+  //     await fetch(`${api.domain}/api/wx/code2Session?app_key=${app_key}&code=${code}`)
+  //   ]).then(async result => {
+  //     const accessTokenInfoJson = await result[0].json()
+  //
+  //     const access_token = accessTokenInfoJson.access_token
+  //     // access_token 在7200秒内有效 (expires_in); access_token 的存储与更新
+  //
+  //     const code2SessionInfoJson = await result[1].json()
+  //
+  //     const openid = code2SessionInfoJson.openid
+  //
+  //     if (access_token && openid) {
+  //       const mp_template_msg = body.mp_template_msg || {
+  //         appid: 'wx7208a4af2628818b',
+  //
+  //       }
+  //
+  //       const template_id = body.template_id || '0yvXL0d8HjAUrSuwxORkLErehefyJS0NUyh8S86-FUk'
+  //       const page = body.page || '/pages/index/index'
+  //       const form_id = body.form_id
+  //       const data = body.data || {
+  //         keyword1: {
+  //           value: '123456789'
+  //         },
+  //         keyword2: {
+  //           value: '520元'
+  //         },
+  //         keyword3: {
+  //           value: '2019年2月14日'
+  //         },
+  //         keyword4: {
+  //           value: '节日快乐'
+  //         }
+  //       }
+  //       const emphasis_keyword = body.emphasis_keyword || 'keyword1.DATA'
+  //
+  //       const res = await fetch(`${api.weixin}/cgi-bin/message/wxopen/template/send`, {
+  //         method: 'POST',
+  //         body: JSON.stringify({
+  //           access_token,
+  //           touser: openid,
+  //           mp_template_msg,
+  //           weapp_template_msg,
+  //         })
+  //       })
+  //
+  //       const json = await res.json()
+  //
+  //       ctx.body = json
+  //     } else if (!access_token) {
+  //       ctx.body = {
+  //         errcode: -1,
+  //         errmsg: 'failed to get access_token'
+  //       }
+  //     } else {
+  //       ctx.body = {
+  //         errcode: -2,
+  //         errmsg: 'failed to get openid'
+  //       }
+  //     }
+  //   })
+  // })
+
+  /*
+   * /api/wx/getTemplateList?app_key=${app_key}&page=${page}&number=${number}
+   */
+  .get('/api/wx/getTemplateList', async (ctx, next) => {
+    const query = ctx.request.query || {}
+    const app_key = query.app_key || ''
+
+    const accessTokenInfo = await fetch(`${api.domain}/api/wx/getAccessToken?app_key=${app_key}`)
+
+    const accessTokenInfoJson = await accessTokenInfo.json()
+
+    const access_token = accessTokenInfoJson.access_token
+    // access_token 在7200秒内有效 (expires_in); access_token 的存储与更新
+
+    if (access_token) {
+      const page = +query.page
+      const number = +query.number
+
+      const res = await fetch(`${api.weixin}/cgi-bin/wxopen/template/list`, {
+        method: 'POST',
+        body: JSON.stringify({
+          access_token,
+          offset: page > 0 ? page - 1 : 0,
+          count: (number > 0 && number < 21) ? number : (number < 1 ? 1 : 20)
+        })
+      })
+
+      const json = await res.json()
+
+      ctx.body = json
+    } else {
+      ctx.body = {
+        errcode: -1,
+        errmsg: 'failed to get access_token'
+      }
+    }
   })
 
   .all('*', async (ctx, next) => {
