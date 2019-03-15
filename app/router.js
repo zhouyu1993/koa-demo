@@ -13,11 +13,13 @@ const api = {
   weixin: '//api.weixin.qq.com',
 }
 
-const router = new Router()
+const router = new Router({
+  prefix: '/koa-demo'
+})
 
 router
   .get('/', async (ctx, next) => {
-    ctx.redirect('/home')
+    ctx.redirect('/koa-demo/home')
   })
   .get('/home', async (ctx, next) => {
     ctx.body = '<h1>Hello World</h1>'
