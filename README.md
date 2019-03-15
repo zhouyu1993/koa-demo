@@ -120,6 +120,14 @@ console.log(Buffer.isBuffer(buffer), bufferStream instanceof stream)
 
 部署
 
+``` bash
+npm i -g pm2
+```
+
+``` bash
+pm2 start index.js
+```
+
 # [more](https://www.jianshu.com/p/d3afa36aa17a)
 
 # 本地模拟 post 请求
