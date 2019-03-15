@@ -7,8 +7,10 @@ import fetch from 'isomorphic-fetch'
 import queryString from 'query-string'
 import nodeXlsx from 'node-xlsx'
 
+const DEBUG = process.env.npm_lifecycle_event === 'dev'
+
 const api = {
-  domain: 'http://dev.zhouyu.com:6789',
+  domain: DEBUG ? 'http://dev.zhouyu.com:6789/koa-demo' : 'http://zhouyu.cf/koa-demo',
   music: '//c.y.qq.com',
   weixin: '//api.weixin.qq.com',
 }
