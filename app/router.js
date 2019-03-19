@@ -576,6 +576,8 @@ router
 
       const json = await res.json()
 
+      console.log('debug', json)
+
       ctx.body = json
     } else {
       ctx.body = appInfoJson
@@ -599,6 +601,8 @@ router
       const res = await fetch(`${api.weixin}/sns/jscode2session?appid=${app_id}&secret=${app_secret}&js_code=${code}&grant_type=authorization_code`)
 
       const json = await res.json()
+
+      console.log('debug', json)
 
       ctx.body = json
     } else {
@@ -630,6 +634,8 @@ router
       const openid = code2SessionInfoJson.openid
 
       if (access_token && openid) {
+        console.log('debug', access_token, openid, '啦啦啦')
+
         const template_id = body.template_id || '0yvXL0d8HjAUrSuwxORkLErehefyJS0NUyh8S86-FUk'
         const page = body.page || '/pages/index/index'
         const form_id = body.form_id
@@ -649,10 +655,9 @@ router
         }
         const emphasis_keyword = body.emphasis_keyword || 'keyword1.DATA'
 
-        const res = await fetch(`${api.weixin}/cgi-bin/message/wxopen/template/send`, {
+        const res = await fetch(`${api.weixin}/cgi-bin/message/wxopen/template/send?access_token=${access_token}`, {
           method: 'POST',
           body: JSON.stringify({
-            access_token,
             touser: openid,
             template_id,
             page,
@@ -663,6 +668,8 @@ router
         })
 
         const json = await res.json()
+
+        console.log('debug', json)
 
         ctx.body = json
       } else if (!access_token) {
@@ -727,10 +734,9 @@ router
   //       }
   //       const emphasis_keyword = body.emphasis_keyword || 'keyword1.DATA'
   //
-  //       const res = await fetch(`${api.weixin}/cgi-bin/message/wxopen/template/send`, {
+  //       const res = await fetch(`${api.weixin}/cgi-bin/message/wxopen/template/send?access_token=${access_token}`, {
   //         method: 'POST',
   //         body: JSON.stringify({
-  //           access_token,
   //           touser: openid,
   //           mp_template_msg,
   //           weapp_template_msg,
@@ -755,7 +761,7 @@ router
   // })
 
   /*
-   * /api/wx/getTemplateList?app_key=${app_key}&page=${page}&number=${number}
+   * /api/wx/getTemplateList?app_key=${app_key}&offset=${offset}&count=${count}
    */
   .get('/api/wx/getTemplateList', async (ctx, next) => {
     const query = ctx.request.query || {}
@@ -769,15 +775,14 @@ router
     // access_token 在7200秒内有效 (expires_in); access_token 的存储与更新
 
     if (access_token) {
-      const page = +query.page
-      const number = +query.number
+      const offset = +query.offset
+      const count = +query.count
 
-      const res = await fetch(`${api.weixin}/cgi-bin/wxopen/template/list`, {
+      const res = await fetch(`${api.weixin}/cgi-bin/wxopen/template/list?access_token=${access_token}`, {
         method: 'POST',
         body: JSON.stringify({
-          access_token,
-          offset: page > 0 ? page - 1 : 0,
-          count: (number > 0 && number < 21) ? number : (number < 1 ? 1 : 20)
+          offset: offset || 0,
+          count: (count > 0 && count < 21) ? count : (count < 1 ? 1 : 20)
         })
       })
 
