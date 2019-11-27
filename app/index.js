@@ -20,7 +20,7 @@ import Router from 'koa-router'
 
 import ArtTemplate from 'koa-art-template'
 
-import config from '../config'
+import config from './config'
 
 import router from './router'
 
