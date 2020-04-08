@@ -11,8 +11,7 @@
             "ie >= 9",
             "ios >= 8",
             "android >= 4.4"
-          ],
-          "node": "8.16.0"
+          ]
         },
         "useBuiltIns": "usage"
       }
